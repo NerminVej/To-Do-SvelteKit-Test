@@ -1,4 +1,6 @@
 <script>
+  import { enhance } from "$app/forms";
+
   const priorities = [
     {
       value: 1,
@@ -17,7 +19,7 @@
 
 <main class="container mx-auto">
   <div class="text-3xl">
-    <form method="POST" action="/">
+    <form method="POST" action="/" use:enhance>
       <div class="flex flex-col gap-8">
         <label for="title">Title</label>
         <input name="title" type="text" id="title" />
@@ -30,6 +32,7 @@
           {/each}
         </select>
       </div>
+      <button type="submit">Add todo</button>
     </form>
 
 
