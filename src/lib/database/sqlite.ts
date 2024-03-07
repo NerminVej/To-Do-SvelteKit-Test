@@ -1,13 +1,20 @@
-import { open, Database } from "sqlite";
+import Database from 'better-sqlite3';
+const db = new Database('todos.db');
+db.pragma('journal_mode = WAL');
 
-export const db: Database = open("todo.db");
+type TodoItem = {
+    title: string;
+    description: string;
+    priority: number;
+};
 
-db.exec(`
-CREATE TABLE IF NOT EXISTS items (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    description TEXT,
-    priority INTEGER
-);
-`);
+export function insertTodoItem(item: TodoItem) {
+    const sql = db.prepare(`INSERT INTO todos (title, description, priority) VALUES (?,?,?)`);
+    const info = sql.run(item.title, item.description, item.priority);
+    return info.changes
+}
 
+export function getTodoItems() {
+    const sql = db.prepare('SELECT * FROM todos')
+    return sql.all()
+}
